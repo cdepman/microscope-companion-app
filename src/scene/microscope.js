@@ -124,8 +124,8 @@ export function buildMicroscope() {
 
   // ---------- Arm ----------
   const arm = part('arm', 'Arm');
-  arm.add(mesh(box(9, 26, 9, 0.8), MAT.cream, { y: 17, z: -9 }));          // pillar
-  arm.add(mesh(box(9, 6.5, 19, 0.8), MAT.cream, { y: 30, z: -2 }));         // overhang toward head
+  arm.add(mesh(box(9, 28, 9, 0.8), MAT.cream, { y: 18, z: -9 }));          // pillar
+  arm.add(mesh(box(9, 5, 13, 0.8), MAT.cream, { y: 29.5, z: -4.5 }));      // overhang; head sits on top at the front
   arm.add(mesh(box(4.5, 14, 2.5, 0.4), MAT.black, { y: 15, z: -4.2 }));     // focusing rack (dovetail)
   arm.add(mesh(box(2.2, 0.8, 0.15, 0.05), MAT.black, { x: 2.2, y: 26, z: -4.4 })); // small label
   tagChildren(arm);
@@ -185,7 +185,7 @@ export function buildMicroscope() {
   pol.add(mesh(cyl(2.4, 2.4, 0.35), MAT.blackMatte, { y: 4.3, z: 3.5 }));
   pol.add(mesh(cyl(1.8, 1.8, 0.1), new THREE.MeshStandardMaterial({ color: 0x4d5a6b, roughness: 0.2, metalness: 0.4, transparent: true, opacity: 0.85 }), { y: 4.52, z: 3.5 }));
   pol.add(mesh(box(1.6, 0.3, 0.6, 0.1), MAT.black, { x: 2.8, y: 4.3, z: 3.5 })); // rotation tab
-  pol.add(mesh(box(4.2, 0.5, 4.2, 0.15), MAT.blackMatte, { y: 26.55, z: 1.6 })); // analyzer slider under head
+  pol.add(mesh(box(4.2, 0.5, 4.2, 0.15), MAT.blackMatte, { y: 26.55, z: 1.6 })); // analyzer slider above the nosepiece
   tagChildren(pol);
   root.add(pol);
   parts.polarizer = pol;
@@ -232,17 +232,20 @@ export function buildMicroscope() {
   nose.userData.objectiveCount = spec.length;
 
   // ---------- Head ----------
+  const headY = 32.0, headZ = 0.8;
   const head = part('head', 'Head');
-  head.position.set(0, 27.6, 0.8);
-  head.add(mesh(cyl(3.4, 3.4, 0.8), MAT.black, { y: 0 }));                  // dovetail ring
-  const body = mesh(box(9.5, 4.2, 6.5, 0.7), MAT.black, { y: 2.4, z: 0.4 });
-  head.add(body);
-  head.add(mesh(box(2.6, 0.8, 1.6, 0.2), MAT.black, { x: 4.9, y: 2.3, z: 2 })); // Nikon label side
-  // observation tube housing angled 30° forward
+  head.position.set(0, headY, headZ);
+  head.add(mesh(cyl(3.6, 3.6, 0.8), MAT.black, { y: 0.4 }));                       // dovetail ring on the arm
+  head.add(mesh(box(9.5, 4.0, 7.0, 0.7), MAT.black, { y: 2.8, z: -0.4 }));         // prism housing
+  head.add(mesh(box(6.5, 1.6, 4.0, 0.5), MAT.black, { y: 5.4, z: -1.0 }));         // prism hump
+  head.add(mesh(box(2.6, 0.8, 1.6, 0.2), MAT.blackMatte, { x: 4.9, y: 2.8, z: 0.5 })); // Nikon label
+  head.add(mesh(cyl(0.5, 0.5, 1.0), MAT.chrome, { x: 5.0, y: 1.6, z: 1.5, rz: Math.PI / 2 })); // dovetail clamp screw
+  // observation tube housing: rises 30° toward the viewer
+  const tubeTilt = -THREE.MathUtils.degToRad(30);
   const tubes = new THREE.Group();
-  tubes.position.set(0, 3.4, 3.0);
-  tubes.rotation.x = THREE.MathUtils.degToRad(30);
-  tubes.add(mesh(box(8.5, 3.0, 3.2, 0.7), MAT.black, { y: 0.4, z: 1.5 }));
+  tubes.position.set(0, 3.2, 2.4);
+  tubes.rotation.x = tubeTilt;
+  tubes.add(mesh(box(8.6, 3.0, 4.0, 0.7), MAT.black, { y: 0.2, z: 1.6 }));
   head.add(tubes);
   tagChildren(head);
   root.add(head);
@@ -252,14 +255,14 @@ export function buildMicroscope() {
   const eyes = part('eyepieces', 'Eyepieces');
   eyes.position.copy(head.position);
   const eyeGroup = new THREE.Group();
-  eyeGroup.position.set(0, 3.4, 3.0);
-  eyeGroup.rotation.x = THREE.MathUtils.degToRad(30);
+  eyeGroup.position.set(0, 3.2, 2.4);
+  eyeGroup.rotation.x = tubeTilt;
   for (const side of [-1, 1]) {
     const x = side * 3.1;
-    eyeGroup.add(mesh(cyl(1.35, 1.35, 4.2), MAT.black, { x, y: 0.4, z: 4.6, rx: Math.PI / 2 }));
-    eyeGroup.add(mesh(cyl(1.55, 1.55, 0.7), MAT.blackMatte, { x, y: 0.4, z: 6.5, rx: Math.PI / 2 }));  // diopter ring
-    eyeGroup.add(mesh(cyl(1.2, 1.2, 0.6), MAT.rubber, { x, y: 0.4, z: 7.1, rx: Math.PI / 2 }));        // eyecup
-    eyeGroup.add(mesh(new THREE.CircleGeometry(0.75, 24), MAT.glass, { x, y: 0.4, z: 7.42 }));         // eye lens
+    eyeGroup.add(mesh(cyl(1.35, 1.35, 4.4), MAT.black, { x, y: 0.2, z: 5.4, rx: Math.PI / 2 }));       // tube
+    eyeGroup.add(mesh(cyl(1.55, 1.55, 0.7), MAT.blackMatte, { x, y: 0.2, z: 7.4, rx: Math.PI / 2 }));  // diopter ring
+    eyeGroup.add(mesh(cyl(1.2, 1.2, 0.6), MAT.rubber, { x, y: 0.2, z: 8.0, rx: Math.PI / 2 }));        // eyecup
+    eyeGroup.add(mesh(new THREE.CircleGeometry(0.75, 24), MAT.glass, { x, y: 0.2, z: 8.32 }));         // eye lens
   }
   eyes.add(eyeGroup);
   tagChildren(eyes);

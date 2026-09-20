@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { buildMicroscope, turretAngleFor } from './microscope.js';
 
-const HOME = { pos: new THREE.Vector3(50, 34, 62), target: new THREE.Vector3(0, 15, 0) };
+const HOME = { pos: new THREE.Vector3(54, 40, 68), target: new THREE.Vector3(0, 18, 0) };
 const LIGHT = window.matchMedia('(prefers-color-scheme: light)').matches;
 // Preferred camera direction (from part centre toward camera) per part.
 const VIEW_DIR = {
