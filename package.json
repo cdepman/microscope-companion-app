@@ -1,0 +1,18 @@
+{
+  "name": "labophot-companion",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Bench companion app for Charlie's Nikon Labophot 1: interactive 3D model, operating guides, history and provenance.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}

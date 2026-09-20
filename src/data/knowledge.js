@@ -1,0 +1,302 @@
+// Knowledge base for the Labophot Companion.
+// Everything here is derived from the original field guide (Nikon manuals,
+// MicroscopyU, and Charlie's own purchase notes). "confidence" marks what is
+// documented for this specific instrument versus typical for the model family.
+
+export const PARTS = [
+  {
+    id: 'head',
+    name: 'Binocular observation head',
+    short: 'Head',
+    confidence: 'photo',
+    body: 'Nikon binocular head with a visible serial label reading 205523. It splits the intermediate image to both eyes, carries the 10× eyepieces, and lets you set interpupillary distance.',
+    detail: 'Labophot heads were modular on a dovetail. Nikon offered 30° Siedentopf binocular and trinocular variants; the exact submodel is not legible in the photos. A trinocular head is the cleanest future upgrade for serious camera work.',
+    tips: ['Adjust interpupillary distance until the two circles merge into one.', 'Set each diopter so both eyes focus without strain.'],
+    keywords: ['head', 'binocular', 'eyepiece', 'eyepieces', 'ocular', 'interpupillary', 'diopter', 'siedentopf', 'trinocular', 'serial', '205523'],
+  },
+  {
+    id: 'eyepieces',
+    name: '10× eyepieces',
+    short: 'Eyepieces',
+    confidence: 'verify',
+    body: 'A pair of 10× eyepieces. One photo appears to show a “10×/20” marking, which would mean a field number of 20.',
+    detail: 'A straight-on photo of the eyepiece engraving would resolve CFW vs CFWN and confirm the field number. With a 10× eyepiece, total magnification is objective × 10.',
+    tips: ['Remove one eyepiece to inspect the objective pupil when setting the condenser aperture.'],
+    keywords: ['eyepiece', 'eyepieces', 'ocular', '10x/20', 'field number', 'cfw', 'cfwn', 'magnification'],
+  },
+  {
+    id: 'nosepiece',
+    name: 'Five-position revolving nosepiece',
+    short: 'Nosepiece',
+    confidence: 'confirmed',
+    body: 'The turret carries the 4×, 10×, 20×, 40× and 100× oil objectives. Rotate it by the knurled turret ring until an objective clicks fully into its detent.',
+    detail: 'Never use an objective barrel as a lever. Charlie’s owner notes call this out explicitly. An objective that has not clicked home gives a dark edge on one side of the field.',
+    tips: ['Rotate by the knurled ring, not the objectives.', 'Listen for the detent click before focusing.'],
+    keywords: ['nosepiece', 'turret', 'revolver', 'rotate', 'objectives', 'detent', 'click'],
+  },
+  {
+    id: 'objectives',
+    name: 'Objective set (4×, 10×, 20×, 40×, 100× oil)',
+    short: 'Objectives',
+    confidence: 'confirmed',
+    body: 'Five finite-conjugate objectives on RMS threads: generic 4×, Nikon 10×, generic 20× semi-plan, Nikon Plan 40×, and a Nikon 100× oil achromat.',
+    detail: 'This is a 160 mm finite tube-length Nikon CF system with 45 mm parfocal objectives. Objectives marked 160 belong here. Modern Nikon CFI objectives marked ∞ are not drop-in replacements.',
+    tips: ['Read the barrel: 160/0.17 expects a 0.17 mm coverslip; 160/– means coverslip thickness is not critical.', 'Keep the 40× dry lens out of immersion oil.'],
+    keywords: ['objective', 'objectives', 'lens', '4x', '10x', '20x', '40x', '100x', 'oil', 'plan', 'achromat', '160', 'cf', 'cfi', 'infinity', 'rms', 'thread', 'parfocal', 'coverslip', '0.17'],
+  },
+  {
+    id: 'stage',
+    name: 'Mechanical stage',
+    short: 'Stage',
+    confidence: 'documented',
+    body: 'Supports the slide and provides X/Y positioning with the coaxial stage knobs. The purchase sheet says this stage was refurbished: repainted, plastic facing adjusted, and fitted with a new fixing screw.',
+    detail: 'Center the feature of interest before moving to a higher objective; the visible field shrinks rapidly with magnification. Leave the stage low enough during storage that no objective can touch a forgotten slide.',
+    tips: ['Coverslip faces up.', 'Center before changing objectives.'],
+    keywords: ['stage', 'slide', 'mechanical', 'x/y', 'clips', 'refurbished', 'repainted', 'holder'],
+  },
+  {
+    id: 'condenser',
+    name: 'Nikon 1.25 NA Abbe condenser',
+    short: 'Condenser',
+    confidence: 'documented',
+    body: 'The condenser focuses illumination into the specimen. Its aperture iris sets the illumination numerical aperture, which controls the balance between contrast, depth of field and resolution.',
+    detail: 'The factory manual specifies this 1.25 NA Abbe condenser for 4× through 100×. It has centering screws and a height rack for Köhler alignment. Closing the iris too far sacrifices resolution and creates diffraction halos.',
+    tips: ['Do not use the iris as a brightness control.', 'Start with the iris at about three-quarters of the objective pupil.'],
+    keywords: ['condenser', 'abbe', 'iris', 'aperture', 'na', '1.25', 'centering', 'contrast', 'diaphragm', 'kohler', 'köhler'],
+  },
+  {
+    id: 'polarizer',
+    name: 'Polarizer and analyzer (custom)',
+    short: 'Polarizer',
+    confidence: 'documented',
+    body: 'A linear polarizer sits over the field lens; an analyzer sits under the head. Both were machined to fit. Rotate them toward 90° to each other until the empty field goes dark.',
+    detail: 'These accessories do not make the stand a Labophot-POL. The analyzer can usually stay installed, but any polarizing film in the path costs light. If brightfield looks dim or tinted, remove it and compare.',
+    tips: ['Set extinction with no specimen on the stage.', 'Great for crystals, synthetic fibers, starch and stressed plastics.'],
+    keywords: ['polarizer', 'polariser', 'analyzer', 'analyser', 'polarized', 'crossed', 'birefringent', 'birefringence', 'extinction', 'crystals'],
+  },
+  {
+    id: 'focus',
+    name: 'Coarse and fine focus',
+    short: 'Focus',
+    confidence: 'confirmed',
+    body: 'Coaxial knobs on both sides move the stage vertically. The original manual specifies 0.2 mm per fine-focus revolution and 4.7 mm per coarse revolution.',
+    detail: 'Special warning for this unit: do not counter-rotate the paired knobs. Opposing one knob against the other can damage the fine-focus gear. Use the dedicated focus-tension adjustment on the left side only.',
+    tips: ['Coarse focus at 10× only; fine focus at 40× and 100×.', 'If focus drifts down, adjust tension, not by fighting the knobs.'],
+    keywords: ['focus', 'coarse', 'fine', 'knob', 'knobs', 'tension', 'drift', 'counter-rotate', 'gear'],
+  },
+  {
+    id: 'arm',
+    name: 'Stand and arm',
+    short: 'Arm',
+    confidence: 'confirmed',
+    body: 'The cast arm carries the head dovetail, the nosepiece and the focusing rack. Pick the microscope up by the arm with one hand under the base.',
+    detail: 'Labophot stands were built rugged for clinical, industrial and teaching labs. Mechanical stiffness here is why the instrument still holds focus decades later.',
+    tips: ['Carry by arm and base, never by the head or stage.'],
+    keywords: ['arm', 'stand', 'body', 'frame', 'carry', 'lift'],
+  },
+  {
+    id: 'illuminator',
+    name: 'Built-in transmitted illuminator',
+    short: 'Illuminator',
+    confidence: 'documented',
+    body: 'The base contains the original 6 V, 20 W halogen Köhler illumination train: lamp, collector, field diaphragm, and the field lens feeding the condenser.',
+    detail: 'Typical original bulb is a Philips 7388 / ESB, G4 bi-pin. Do not touch a replacement quartz bulb with bare fingers. Verify the base label before buying fuses or assuming line voltage.',
+    tips: ['Turn the lamp down before switching off; it extends bulb life.', 'Unplug and cool before changing the bulb.'],
+    keywords: ['lamp', 'bulb', 'halogen', 'illuminator', 'light', 'field lens', 'field diaphragm', '6v', '20w', '7388', 'esb', 'brightness', 'base', 'fuse', 'power'],
+  },
+  {
+    id: 'base',
+    name: 'Base and controls',
+    short: 'Base',
+    confidence: 'confirmed',
+    body: 'The cream cast base houses the power supply, lamp housing, the brightness control and the field diaphragm ring around the field lens.',
+    detail: 'The base runs warm during long sessions. Keep liquids contained on slides and away from it.',
+    tips: ['Check the electrical label on the underside before any electrical service.'],
+    keywords: ['base', 'foot', 'power', 'switch', 'brightness', 'dimmer', 'field diaphragm'],
+  },
+  {
+    id: 'sidelight',
+    name: 'Gooseneck side lights (add-on)',
+    short: 'Side lights',
+    confidence: 'photo',
+    body: 'Two gooseneck LED lamps clamp to the stand and illuminate opaque subjects from above and the side. Most useful with the 4× objective, whose long working distance leaves room to aim the light.',
+    detail: 'This is oblique reflected illumination, not true coaxial epi-illumination. Expect shadows and directional texture, which is often exactly what makes surfaces readable.',
+    tips: ['Use for chips, coins, textiles, insects.', 'Transmitted light will not help with opaque silicon; side light will.'],
+    keywords: ['gooseneck', 'side light', 'side lights', 'incident', 'reflected', 'epi', 'opaque', 'led', 'lamps'],
+  },
+];
+
+export const PART_BY_ID = Object.fromEntries(PARTS.map((p) => [p.id, p]));
+
+export const OBJECTIVES = [
+  { mag: 4, label: '4×', total: '40×', name: '4× scanning objective', lens: 'Generic 4×', na: '~0.10', res: '~2.75 µm', oil: false,
+    desc: 'Best for finding the subject, whole organisms, and opaque objects under the side lights. Most working distance, greatest depth of field.',
+    habit: 'Navigate here, center, then move up.' },
+  { mag: 10, label: '10×', total: '100×', name: '10× Nikon objective', lens: 'Nikon 10×', na: '~0.25', res: '~1.10 µm', oil: false,
+    desc: 'The workhorse. Initial focus, Köhler alignment, cells, larger protists, and navigating prepared tissue sections.',
+    habit: 'Safest objective for coarse focus.' },
+  { mag: 20, label: '20×', total: '200×', name: '20× semi-plan objective', lens: 'Generic 20× semi-plan', na: '~0.40', res: '~0.69 µm', oil: false,
+    desc: 'An excellent middle gear: substantially more detail without the short working distance and shallow depth of field of 40×.',
+    habit: 'Often the best lens for living pond samples.' },
+  { mag: 40, label: '40×', total: '400×', name: '40× Nikon Plan objective', lens: 'Nikon PLAN 40×', na: '~0.65', res: '~0.42 µm', oil: false,
+    desc: 'High dry magnification with a flat field. Fine cellular detail, but working distance is short and focus is less forgiving.',
+    habit: 'Center first, fine focus only. Keep it out of oil.' },
+  { mag: 100, label: '100× oil', total: '1000×', name: '100× Nikon oil achromat', lens: 'Nikon 100× oil achromat', na: '~1.25', res: '~0.22 µm', oil: true,
+    desc: 'Maximum resolution. Its numerical aperture depends on immersion oil between coverslip and front element.',
+    habit: 'Find the target before oiling; clean immediately after.' },
+];
+
+export const GUIDES = [
+  {
+    id: 'quickstart',
+    title: 'Quick start',
+    deck: 'A clean 3-minute setup that gets you to a safe, useful image.',
+    focusPart: 'stage',
+    steps: [
+      { t: 'Inspect before power', b: 'Make sure the 100× oil lens is clean, the stage moves freely, and no objective is touching a slide.', part: 'objectives' },
+      { t: 'Start at 10×', b: 'Slide on the stage, coverslip up. Select the 10× objective and center the specimen.', part: 'nosepiece' },
+      { t: 'Turn on gently', b: 'Bring the lamp up only as bright as needed. Lower settings mean less heat and longer bulb life.', part: 'illuminator' },
+      { t: 'Set your eyes', b: 'Adjust interpupillary distance until the two circles merge. Then set the diopters so both eyes focus without strain.', part: 'head' },
+      { t: 'Focus safely', b: 'Coarse focus at 10×, then fine. At higher powers use fine focus only, unless deliberately resetting from a safe distance.', part: 'focus' },
+      { t: 'Set illumination', b: 'Run the Köhler procedure. The condenser iris is not a brightness control; it balances resolution and contrast.', part: 'condenser' },
+      { t: 'Move up in power', b: 'Center what you care about before switching to 20× or 40×. At 100×, use oil and the dedicated procedure.', part: 'objectives' },
+    ],
+    warning: 'Do not counter-rotate the paired focus knobs. Opposing one knob against the other can damage the fine-focus gear. Use the left-side tension adjustment only.',
+  },
+  {
+    id: 'kohler',
+    title: 'Köhler illumination',
+    deck: 'Even illumination, filament kept out of the image, and an aperture that actually controls contrast versus resolution.',
+    focusPart: 'condenser',
+    steps: [
+      { t: 'Start at 10×', b: 'Focus a representative area of the specimen with the 10× objective. Set the lamp to a comfortable level.', why: '10× is forgiving enough to align, but high enough to see the field diaphragm cleanly.', part: 'nosepiece' },
+      { t: 'Close the field diaphragm', b: 'Turn the field diaphragm down until you see its polygonal edge in the image.', why: 'The field diaphragm controls the illuminated area, not the illumination cone.', part: 'illuminator' },
+      { t: 'Focus the diaphragm edge', b: 'Raise or lower the condenser until the edge of the field diaphragm is sharp in the specimen plane.', why: 'Condenser height establishes the field conjugate plane.', part: 'condenser' },
+      { t: 'Center the condenser', b: 'Use the condenser centering screws to put the diaphragm image in the center of the view.', why: 'An off-center condenser darkens one side and reduces effective resolution.', part: 'condenser' },
+      { t: 'Open the field diaphragm', b: 'Open until the edge just disappears beyond the visible field. Recenter if needed.', why: 'Opening further only sends stray light into the system.', part: 'illuminator' },
+      { t: 'Set the condenser aperture', b: 'Remove one eyepiece and look at the objective pupil. Adjust the iris until illumination fills roughly 70–80% of the pupil.', why: 'The original training manual gives three-quarters as the starting point.', part: 'eyepieces' },
+      { t: 'Replace eyepiece and fine-tune', b: 'Judge the specimen. Open the aperture a little for resolution; close a little for contrast and depth of field.', why: 'Never use the iris just to make the image brighter or darker.', part: 'condenser' },
+      { t: 'Repeat after big magnification changes', b: 'Moving from 10× to 40× or 100×, re-check aperture and field diaphragm.', why: 'Each objective has a different NA and field size.', part: 'objectives' },
+    ],
+  },
+  {
+    id: 'oil',
+    title: '100× oil immersion',
+    deck: 'Oil lets the high-NA objective capture rays that would otherwise refract away at the glass–air boundary.',
+    focusPart: 'objectives',
+    steps: [
+      { t: 'Find the target at 10×, confirm at 40×', b: 'Center it. The 100× field is tiny.', part: 'stage' },
+      { t: 'Move the dry objective away', b: 'Do not drag it through oil. Put one small drop of microscope immersion oil on the coverslip over the target.', part: 'nosepiece' },
+      { t: 'Rotate the 100× into the drop', b: 'Slowly, watching from the side while it engages.', part: 'objectives' },
+      { t: 'Fine focus only', b: 'Sharpen the image with fine focus. Increase lamp brightness as needed; the 100× needs the most light.', part: 'focus' },
+      { t: 'Re-check the condenser', b: 'Alignment and aperture matter most here.', part: 'condenser' },
+      { t: 'Rotate away cleanly', b: 'When finished, rotate the 100× off without letting the 40× pass through the oil.', part: 'nosepiece' },
+      { t: 'Clean', b: 'Blot with lens paper, then an objective-safe cleaner. Check the condenser top and neighboring objectives for stray oil.', part: 'objectives' },
+    ],
+    warning: 'Never use the 100× dry. Never mix oils. Never leave oil overnight. Air bubbles show as dark shapes in the objective pupil; nudge the objective or reapply the drop.',
+  },
+  {
+    id: 'modes',
+    title: 'Viewing modes',
+    deck: 'Three ways to light a subject on this setup.',
+    focusPart: 'polarizer',
+    cards: [
+      { t: 'Transmitted brightfield', b: 'Built-in light passes up through the specimen. Default for prepared slides, pond organisms, cells and thin tissue. Align Köhler, use the condenser aperture for contrast.', part: 'illuminator' },
+      { t: 'Crossed polarization', b: 'Lower polarizer plus analyzer under the head, rotated to 90°. Birefringent samples light up: drug crystals, synthetic fibers, starch, stressed plastics, thin sections.', part: 'polarizer' },
+      { t: 'Side / incident light', b: 'Gooseneck lamps on opaque subjects, best with the 4× objective. Chips, textiles, insects, coins, surface texture. Oblique reflected light, not coaxial epi.', part: 'sidelight' },
+    ],
+  },
+  {
+    id: 'care',
+    title: 'Care and cleaning',
+    deck: '1980s grease, coatings and plastics reward restraint. Most damage comes from forcing, over-cleaning, or contaminating optics.',
+    focusPart: 'objectives',
+    cards: [
+      { t: 'Optics', b: 'Blower first. Brush only if needed. Clean glass only for visible fingerprints, oil or film: lens paper plus an optical solvent such as absolute ethanol. Charlie’s notes also mention ROR and delicate tissues.', part: 'objectives' },
+      { t: 'Mechanics', b: 'Never force focus, stage or nosepiece. Stiffness usually means old grease, not a need for more torque. Rotate the turret by its ring.', part: 'nosepiece' },
+      { t: 'Lamp and base', b: 'Unplug and cool before changing the bulb: 6 V, 20 W halogen, commonly Philips 7388 / ESB. Do not touch quartz with bare fingers. Verify the base label before buying fuses.', part: 'illuminator' },
+      { t: 'Focus mechanics', b: 'Do not counter-rotate the knobs. Use the left-side tension mechanism: too tight and focus is hard to move; too loose and the stage drops.', part: 'focus' },
+      { t: 'Storage', b: 'Stage low, oil removed, lamp down then off, cover once cool. Dry, low-dust place. No damp specimens under the cover.', part: 'stage' },
+    ],
+  },
+  {
+    id: 'experiments',
+    title: 'Things to look at',
+    deck: 'The best way to keep a microscope useful is to keep feeding it objects.',
+    focusPart: 'stage',
+    cards: [
+      { t: 'Crystal smears', b: 'Dissolve a tiny amount of a known safe crystalline material, dry a drop on a slide, coverslip, crossed polarizers. Acetaminophen makes dramatic birefringent patterns.', part: 'polarizer' },
+      { t: 'Dryer lint and fibers', b: 'A few fibers under a coverslip. Synthetics show striking colors under crossed polarization because drawing orients the polymer chains.', part: 'polarizer' },
+      { t: 'Pond life', b: 'A drop under a coverslip at 10×–20×. Start with very little water so the sample is not too deep.', part: 'objectives' },
+      { t: 'Onion root tip mitosis', b: 'Scan at 10×, find the dense growth zone, move to 40×. Classic way to see the stages of mitosis.', part: 'objectives' },
+      { t: 'Bone and kidney sections', b: 'Good 10×–40× exercises. Compare how opening and closing the condenser aperture trades fine structure against contrast.', part: 'condenser' },
+      { t: 'Silicon wafer / chips', b: '4× objective and the gooseneck side light. Oblique incident light reveals patterns, scratches and topography.', part: 'sidelight' },
+    ],
+    warning: 'No unknown powders, volatile solvents, corrosives or biological hazards on the microscope. The halogen base runs hot. Keep liquids on slides and away from the stand.',
+  },
+];
+
+export const TROUBLESHOOTING = [
+  { q: 'Image is dim', a: 'Check lamp intensity, field diaphragm, condenser height and condenser aperture. Make sure the analyzer or polarizer is not blocking light unintentionally. At 100×, confirm you are actually using oil and that there is no air bubble.', part: 'illuminator', keywords: ['dim', 'dark', 'brightness', 'no light'] },
+  { q: 'Image is low contrast or washed out', a: 'Close the condenser aperture modestly. Re-establish Köhler illumination. Check condenser centering. A wide-open aperture gives resolution but can make low-contrast specimens vanish.', part: 'condenser', keywords: ['contrast', 'washed', 'flat', 'faint'] },
+  { q: 'Image is grainy or has halos', a: 'The condenser aperture is probably closed too far. Open it. Excessive closure increases diffraction artifacts and reduces resolution.', part: 'condenser', keywords: ['grainy', 'halo', 'halos', 'diffraction', 'artifact'] },
+  { q: 'One side of the field is dark', a: 'Center the condenser, open the field diaphragm enough, and make sure no polarizer, filter or slider is partly in the path. Check that the objective has clicked fully into its detent.', part: 'condenser', keywords: ['one side', 'uneven', 'shadow', 'half dark'] },
+  { q: 'Focus drifts downward', a: 'Focus tension is too loose. Use the dedicated tension adjustment on the left side. Do not oppose one focus knob against the other.', part: 'focus', keywords: ['drift', 'drifts', 'sinks', 'drops', 'loose'] },
+  { q: '40× or 100× crashes into the slide', a: 'Do not chase focus by raising the stage while looking through the eyepieces. From the side, bring the spring-loaded high-power objective near the coverslip, then look through and focus by moving away from the specimen.', part: 'objectives', keywords: ['crash', 'crashes', 'hit', 'hits', 'collide', 'touch', 'slide'] },
+  { q: '100× looks worse than 40×', a: 'Common causes: no oil, wrong oil, air bubble, oil on the wrong lens, condenser aperture too small, condenser not aligned, thick or wrong coverslip, or specimen not thin enough.', part: 'objectives', keywords: ['100x worse', 'blurry', 'blurry at 100', 'soft', 'worse'] },
+  { q: 'Polarized field will not go dark', a: 'Rotate one polarizer relative to the other until orthogonal, with no specimen in place. If it still will not darken, look for strain birefringence in intermediate plastic or glass, and confirm both filters are truly linear polarizers.', part: 'polarizer', keywords: ['polarized', 'polarizer', 'extinction', 'wont go dark', 'not dark'] },
+];
+
+export const FAQ = [
+  { q: 'What objectives fit this microscope?', a: 'Finite 160 mm RMS-thread objectives, ideally Nikon CF. Many finite RMS objectives will physically mount (the generic 4× and 20× prove mixed systems work), but avoid anything engraved ∞: modern CFI infinity objectives expect a tube lens.', part: 'objectives', keywords: ['fit', 'compatible', 'compatibility', 'buy', 'replacement', 'upgrade', 'infinity', 'cfi', '160'] },
+  { q: 'What bulb does it take?', a: 'A 6 V, 20 W halogen, commonly Philips 7388 / ESB (G4 bi-pin). Verify against the label on the base before ordering. Never touch the quartz envelope with bare fingers.', part: 'illuminator', keywords: ['bulb', 'lamp', 'replace bulb', 'halogen', '7388', 'esb', 'burned out'] },
+  { q: 'What does total magnification mean?', a: 'Objective magnification × eyepiece magnification. With the 10× eyepieces: 40×, 100×, 200×, 400× and 1000×. Useful magnification tops out around 500–1000× the NA; past that it is empty magnification.', part: 'eyepieces', keywords: ['magnification', 'total', 'how much', 'zoom', 'power'] },
+  { q: 'How is the Nikon CF system different?', a: 'In 1976 Nikon introduced CF (Chromatic aberration Free) optics: the objective and eyepiece each handle their own chromatic correction instead of the eyepiece compensating for the objective. The Labophot inherited it. Matching CF objectives and CF eyepieces gives the intended correction across the field.', part: 'objectives', keywords: ['cf', 'chromatic', 'aberration', 'system', 'optics', 'eyepiece compensation'] },
+  { q: 'Why is there a $500 figure?', a: 'That is the documented total on the component sheet for the assembled setup, not a current market valuation.', part: 'base', keywords: ['500', 'price', 'cost', 'worth', 'value', 'paid'] },
+  { q: 'How do I carry it?', a: 'One hand around the arm, one under the base. Never lift by the head, stage or focus knobs. Lower the stage first.', part: 'arm', keywords: ['carry', 'lift', 'move', 'transport'] },
+  { q: 'Which objective for pond water?', a: '10× to find things, 20× for most protists and rotifers. The 20× semi-plan is the sweet spot: enough detail, still forgiving working distance and depth of field.', part: 'objectives', keywords: ['pond', 'protist', 'protozoa', 'rotifer', 'algae', 'water'] },
+  { q: 'What is the field diaphragm versus the aperture iris?', a: 'Field diaphragm (in the base) controls how much of the specimen is illuminated. Aperture iris (in the condenser) controls the illumination cone: contrast, depth of field and resolution. Only the field diaphragm is a size control; the iris is never a brightness control.', part: 'condenser', keywords: ['field diaphragm', 'aperture', 'iris', 'difference', 'diaphragm'] },
+];
+
+export const HISTORY = [
+  { year: '1917', title: 'Nippon Kogaku is founded', body: 'Nikon’s predecessor is established in Tokyo to build precision optical instruments, including microscopes.' },
+  { year: '1925', title: 'JOICO microscope', body: 'Nikon traces its microscope lineage to the JOICO, its first design with a revolving nosepiece and interchangeable objectives.' },
+  { year: '1976', title: 'Nikon CF optical system', body: 'The Biophot and Metaphot introduce CF objectives, a break from paired objective/eyepiece chromatic compensation.' },
+  { year: 'Early 1980s', title: 'Labophot', body: 'CF optics in a rugged, less expensive modular stand for clinical, biological, industrial and teaching labs. Five-place nosepiece, 6 V 20 W halogen Köhler illumination. This is Charlie’s generation.' },
+  { year: 'Later 1980s', title: 'Labophot 2', body: 'Nikon revises the platform, including a brighter 30 W illuminator. The original 20 W stand becomes “Labophot 1” in collector shorthand.' },
+  { year: '1988', title: 'Nippon Kogaku becomes Nikon Corporation', body: 'The company adopts the Nikon name. During the Labophot era, “Nikon” was already the product brand while the corporate identity was still changing.' },
+  { year: '2026', title: 'This instrument', body: 'Assembled and refurbished setup: Labophot 1 stand, Nikon 1.25 NA condenser, refurbished stage, binocular head 205523, five objectives, custom polarizers, add-on gooseneck lighting. Documented total: $500.' },
+];
+
+export const PHOTOS = [
+  { src: 'photos/front-three-quarter.jpg', caption: 'Front three-quarter view. Transmitted field lit; gooseneck lights visible.' },
+  { src: 'photos/alternate-view.jpg', caption: 'Stage, objectives, condenser and focus controls from the other side.' },
+  { src: 'photos/head-closeup.jpg', caption: 'Head close-up. Serial label 205523. One eyepiece appears to read 10×/20.' },
+];
+
+export const DOCUMENTS = [
+  { src: 'photos/operating-notes.jpg', caption: 'Operating notes: polarizer use, condenser iris, focus warning, objective set, working distance, bulb, samples and supplies.' },
+  { src: 'photos/component-sheet.jpg', caption: 'Component sheet: Labophot 1 stand, Nikon 1.25 NA condenser, stage, head, eyepieces, objective set, custom polarizers, $500 total.' },
+];
+
+export const SOURCES = [
+  { title: 'Nikon MicroscopyU, Labophot museum entry', url: 'https://www.microscopyu.com/museum/labophot-entry-level-research-microscope', note: 'Primary history and specification source.' },
+  { title: 'Original Nikon Labophot instruction manual', url: 'https://www.richmondscientific.com/wp-content/uploads/2025/04/Nikon-Labophot-Microscope-Manual.pdf', note: 'Optical system, condensers, illumination, focusing.' },
+  { title: 'Nikon / UT Houston Labophot operation manual', url: 'https://www.ifixit.com/Document/aUI24MluKsZGDSrw/Nikon%20Labophot%20Operation%20Manual.pdf', note: 'Köhler setup, oil immersion, cleaning, troubleshooting.' },
+  { title: 'Nikon corporate history', url: 'https://www.nikon.com/company/corporate/history/', note: 'Company and microscope milestones.' },
+  { title: 'MicroscopyU, Köhler illumination', url: 'https://www.microscopyu.com/tutorials/kohler', note: 'Alignment principles.' },
+  { title: 'MicroscopyU, resolution', url: 'https://www.microscopyu.com/microscopy-basics/resolution', note: 'NA, condenser alignment and resolution.' },
+  { title: 'Nikon, oil immersion operation', url: 'https://www.microscope.healthcare.nikon.com/guides/ei/en/page/oil.html', note: 'Current oil-immersion guidance.' },
+  { title: 'Nikon, objective cleaning guide', url: 'https://downloads.microscope.healthcare.nikon.com/phase4/literature/Brochures/how-to-clean-objectives_dl-r.pdf', note: 'Cleaning materials and procedure.' },
+  { title: 'MicroscopyU, polarized light microscopy', url: 'https://www.microscopyu.com/techniques/polarized-light/polarized-light-microscopy', note: 'Birefringence in crystals, fibers, polymers.' },
+  { title: 'Independent Labophot technical reference', url: 'https://www.prc68.com/I/Labophot.html', note: 'Secondary compatibility notes, cross-checked against Nikon documentation.' },
+];
+
+export const CHECKLIST = [
+  { id: 'slide', label: 'Slide secured, coverslip up' },
+  { id: '10x', label: 'Started on 10×' },
+  { id: 'eyes', label: 'Interpupillary distance and diopters set' },
+  { id: 'kohler', label: 'Köhler illumination aligned' },
+  { id: 'oil', label: 'If 100× used: oil removed after session' },
+  { id: 'lamp', label: 'Lamp turned down, then off' },
+];
