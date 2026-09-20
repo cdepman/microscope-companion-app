@@ -88,6 +88,20 @@ $('#btnReset').addEventListener('click', () => { app.viewer.select(null); app.up
 btnSpin.addEventListener('click', () => { app.viewer.setAutoRotate(!app.viewer.autoRotate); syncSpin(); });
 $('#btnPanel').addEventListener('click', () => $('.stage').classList.toggle('panel-hidden'));
 
+// theme: dark by default, light on request, remembered in this browser
+const btnTheme = $('#btnTheme');
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  document.querySelector('meta[name="color-scheme"]').content = theme;
+  btnTheme.textContent = theme === 'dark' ? 'Light' : 'Dark';
+  app.viewer.setTheme(theme === 'light');
+  try { localStorage.setItem('labophot-theme', theme); } catch {}
+}
+let savedTheme = 'dark';
+try { savedTheme = localStorage.getItem('labophot-theme') || 'dark'; } catch {}
+applyTheme(savedTheme);
+btnTheme.addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+
 // idle auto-rotate on first load, until the user touches the scene
 app.viewer.setAutoRotate(true); syncSpin();
 $('#scene').addEventListener('pointerdown', () => { app.viewer.setAutoRotate(false); syncSpin(); }, { once: true });
@@ -105,6 +119,7 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'r' || e.key === 'R') $('#btnReset').click();
   if (e.key === ' ') { e.preventDefault(); btnSpin.click(); }
   if (e.key === 'p' || e.key === 'P') $('#btnPanel').click();
+  if (e.key === 't' || e.key === 'T') btnTheme.click();
   if (e.key === '/') { e.preventDefault(); app.panel.show('ask'); }
   const n = Number(e.key);
   if (n >= 1 && n <= 5) app.setObjective(OBJECTIVES[n - 1].mag);

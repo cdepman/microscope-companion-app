@@ -3,8 +3,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { buildMicroscope, turretAngleFor } from './microscope.js';
 
-const HOME = { pos: new THREE.Vector3(54, 40, 68), target: new THREE.Vector3(0, 18, 0) };
-const LIGHT = window.matchMedia('(prefers-color-scheme: light)').matches;
+const HOME = { pos: new THREE.Vector3(56, 40, 70), target: new THREE.Vector3(0, 19, 0) };
 // Preferred camera direction (from part centre toward camera) per part.
 const VIEW_DIR = {
   default: new THREE.Vector3(0.75, 0.5, 1),
@@ -98,7 +97,8 @@ export class Viewer {
 
   buildGround() {
     const geo = new THREE.CircleGeometry(60, 64);
-    const mat = new THREE.ShadowMaterial({ opacity: LIGHT ? 0.22 : 0.35 });
+    const mat = new THREE.ShadowMaterial({ opacity: 0.35 });
+    this.groundShadow = mat;
     const ground = new THREE.Mesh(geo, mat);
     ground.rotation.x = -Math.PI / 2;
     ground.position.y = -0.3;
@@ -108,12 +108,20 @@ export class Viewer {
     // faint bench disc for grounding
     const disc = new THREE.Mesh(
       new THREE.CircleGeometry(34, 64),
-      new THREE.MeshStandardMaterial({ color: LIGHT ? 0xe4e0d6 : 0x1a1c20, roughness: 0.95, metalness: 0, transparent: true, opacity: LIGHT ? 0.6 : 0.55 }),
+      new THREE.MeshStandardMaterial({ color: 0x1a1c20, roughness: 0.95, metalness: 0, transparent: true, opacity: 0.55 }),
     );
     disc.rotation.x = -Math.PI / 2;
     disc.position.y = -0.31;
     disc.receiveShadow = true;
     this.scene.add(disc);
+    this.bench = disc;
+  }
+
+  /** Swap bench colours for the light or dark UI theme. */
+  setTheme(light) {
+    this.bench.material.color.set(light ? 0xe4e0d6 : 0x1a1c20);
+    this.bench.material.opacity = light ? 0.6 : 0.55;
+    this.groundShadow.opacity = light ? 0.22 : 0.35;
   }
 
   bindEvents() {
@@ -159,7 +167,7 @@ export class Viewer {
     const g = this.parts[partId];
     if (!g) return;
     g.traverse((o) => {
-      if (!o.isMesh) return;
+      if (!o.isMesh || o.userData.partId !== partId) return;
       if (!o.userData.origMat) o.userData.origMat = o.material;
       if (color === null) { o.material = o.userData.origMat; return; }
       const m = o.userData.origMat.clone();
