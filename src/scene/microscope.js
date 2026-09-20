@@ -120,8 +120,9 @@ export function buildMicroscope() {
   base.add(mesh(box(19, 2.0, 12, 0.6), MAT.cream, { y: 6.0, z: PILLAR_FRONT - 4 }));         // pillar foot
   base.add(mesh(box(10, 0.6, 10, 0.2), MAT.blackMatte, { y: 5.55, z: AXIS_Z }));             // recessed black panel around the field lens
   // brightness control wheel on the front face, bottom-left
-  const wheel = knurl(2.1, 0.8, MAT.black); wheel.rotation.z = Math.PI / 2; wheel.position.set(-8.5, 1.9, 15.9); base.add(wheel);
-  base.add(mesh(cyl(0.6, 0.6, 1.0), MAT.chrome, { x: -8.5, y: 1.9, z: 16.1, rz: Math.PI / 2 }));
+  // horizontal thumb wheel (vertical axis), sunk into the front-left corner so its rim shows edge-on
+  const wheel = knurl(2.4, 1.0, MAT.black); wheel.position.set(-9.6, 1.8, 15.2); base.add(wheel);
+  base.add(mesh(cyl(2.6, 2.6, 0.25), MAT.black, { x: -9.6, y: 2.45, z: 15.2 }));  // top lip
   base.add(mesh(box(1.4, 0.9, 2.2, 0.15), MAT.black, { x: -12.7, y: 2.4, z: -10 }));       // power rocker, left rear
   base.add(mesh(box(4.2, 1.3, 0.2, 0.1), MAT.black, { y: 1.9, z: 16.1 }));                 // Nikon badge, front
   base.add(mesh(box(3.4, 0.7, 0.1, 0.05), MAT.chrome, { y: 1.9, z: 16.22 }));
