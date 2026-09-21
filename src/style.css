@@ -91,7 +91,7 @@ button.small { padding: 5px 10px; font-size: 12.5px; }
 }
 .label small { display: block; color: var(--muted); font-weight: 500; font-size: 11px; }
 .viewport-hint { position: absolute; left: 16px; bottom: 14px; font-size: 12px; color: var(--muted); pointer-events: none; opacity: .9; }
-.legend { position: absolute; left: 16px; top: 14px; display: flex; flex-direction: column; gap: 4px; }
+.legend { position: absolute; left: 16px; top: 14px; display: grid; grid-template-columns: repeat(2, max-content); gap: 4px 6px; }
 .legend button {
   border: 1px solid transparent; background: color-mix(in srgb, var(--surface) 70%, transparent); backdrop-filter: blur(6px);
   border-radius: 8px; padding: 4px 9px; font-size: 12px; color: var(--muted); text-align: left; font-weight: 600;

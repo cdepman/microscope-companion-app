@@ -121,9 +121,6 @@ export function buildMicroscope() {
   base.add(mesh(box(10, 0.6, 10, 0.2), MAT.blackMatte, { y: 5.55, z: AXIS_Z }));             // recessed black panel around the field lens
   // brightness control wheel on the front face, bottom-left
   // horizontal thumb wheel (vertical axis), sunk into the front-left corner so its rim shows edge-on
-  const wheel = knurl(2.4, 1.0, MAT.black); wheel.position.set(-9.6, 1.8, 15.2); base.add(wheel);
-  base.add(mesh(cyl(2.6, 2.6, 0.25), MAT.black, { x: -9.6, y: 2.45, z: 15.2 }));  // top lip
-  base.add(mesh(box(1.4, 0.9, 2.2, 0.15), MAT.black, { x: -12.7, y: 2.4, z: -10 }));       // power rocker, left rear
   base.add(mesh(box(4.2, 1.3, 0.2, 0.1), MAT.black, { y: 1.9, z: 16.1 }));                 // Nikon badge, front
   base.add(mesh(box(3.4, 0.7, 0.1, 0.05), MAT.chrome, { y: 1.9, z: 16.22 }));
   for (const [x, z] of [[-10.5, 14], [10.5, 14], [-10.5, -19], [10.5, -19]]) base.add(mesh(cyl(1, 1, 0.4), MAT.rubber, { x, y: -0.1, z }));
@@ -131,19 +128,49 @@ export function buildMicroscope() {
   root.add(base);
   parts.base = base;
 
+  // ---------- Brightness dial (horizontal thumb wheel in the front-left corner) ----------
+  const dimmer = part('dimmer', 'Brightness dial');
+  const wheel = knurl(2.4, 1.0, MAT.black); wheel.position.set(-9.6, 1.8, 15.2); dimmer.add(wheel);
+  dimmer.add(mesh(cyl(2.6, 2.6, 0.25), MAT.black, { x: -9.6, y: 2.45, z: 15.2 }));  // top lip
+  tagChildren(dimmer);
+  root.add(dimmer);
+  parts.dimmer = dimmer;
+
+  // ---------- Power switch (rocker on the left side, rear) ----------
+  const power = part('power', 'Power switch');
+  power.add(mesh(box(1.4, 0.9, 2.2, 0.15), MAT.black, { x: -12.7, y: 2.4, z: -10 }));
+  power.add(mesh(box(0.5, 0.5, 0.9, 0.1), MAT.chrome, { x: -13.3, y: 2.4, z: -9.6 }));
+  tagChildren(power);
+  root.add(power);
+  parts.power = power;
+
   // ---------- Illuminator (field lens + field diaphragm ring + lamp housing) ----------
   const illum = part('illuminator', 'Illuminator');
-  illum.add(mesh(cyl(2.7, 2.7, 0.6), MAT.black, { y: 6.1, z: AXIS_Z }));                   // field diaphragm ring
-  const fdRing = knurl(2.85, 0.35, MAT.black); fdRing.position.set(0, 5.95, AXIS_Z); illum.add(fdRing);
   illum.add(mesh(cyl(2.0, 2.0, 0.2), MAT.lamp, { y: 6.45, z: AXIS_Z }));                  // glowing field lens
-  illum.add(mesh(box(8, 5.5, 5, 0.5), MAT.creamDark, { y: 4.2, z: -23 }));                 // lamp housing behind the base
-  illum.add(mesh(cyl(1.4, 1.4, 1.0), MAT.black, { y: 4.2, z: -25.9, rx: Math.PI / 2 }));   // lamp cap
   const glow = new THREE.PointLight(0xffd77a, 6, 12, 2);
   glow.position.set(0, 7.3, AXIS_Z);
   illum.add(glow);
   tagChildren(illum);
   root.add(illum);
   parts.illuminator = illum;
+
+  // ---------- Field diaphragm (knurled ring around the field lens) ----------
+  const fd = part('fielddiaphragm', 'Field diaphragm');
+  fd.add(mesh(cyl(2.7, 2.7, 0.6), MAT.black, { y: 6.1, z: AXIS_Z }));
+  const fdRing = knurl(2.95, 0.4, MAT.black); fdRing.position.set(0, 5.95, AXIS_Z); fd.add(fdRing);
+  fd.add(mesh(box(1.2, 0.3, 0.5, 0.1), MAT.black, { x: 2.9, y: 5.95, z: AXIS_Z }));  // lever
+  tagChildren(fd);
+  root.add(fd);
+  parts.fielddiaphragm = fd;
+
+  // ---------- Lamp house (behind the base) ----------
+  const lamp = part('lamphouse', 'Lamp house');
+  lamp.add(mesh(box(8, 5.5, 5, 0.5), MAT.creamDark, { y: 4.2, z: -23 }));
+  lamp.add(mesh(cyl(1.4, 1.4, 1.0), MAT.black, { y: 4.2, z: -25.9, rx: Math.PI / 2 }));   // lamp cap
+  for (let i = 0; i < 5; i++) lamp.add(mesh(box(6, 0.15, 0.4, 0.02), MAT.black, { y: 2.4 + i * 0.9, z: -25.55 })); // vent slots
+  tagChildren(lamp);
+  root.add(lamp);
+  parts.lamphouse = lamp;
 
   // ---------- Arm: vertical pillar at the back, overhang forward to the head ----------
   const arm = part('arm', 'Arm');
@@ -180,23 +207,34 @@ export function buildMicroscope() {
   const stageZ = 1.8;
   stage.add(mesh(box(17, 1.0, 13, 0.25), MAT.blackMatte, { y: STAGE_Y - 0.5, z: stageZ }));
   stage.add(mesh(cyl(2.2, 2.2, 1.05), MAT.black, { y: STAGE_Y - 0.5, z: AXIS_Z }));          // aperture surround
-  // slide holder: L-shaped guide plus spring arm
-  stage.add(mesh(box(8, 0.35, 0.5, 0.05), MAT.black, { x: -1, y: STAGE_Y + 0.15, z: AXIS_Z - 2.6 }));
-  stage.add(mesh(box(0.5, 0.35, 5.6, 0.05), MAT.black, { x: -5, y: STAGE_Y + 0.15, z: AXIS_Z }));
-  stage.add(mesh(box(3.2, 0.3, 1.2, 0.1), MAT.chrome, { x: 3.4, y: STAGE_Y + 0.25, z: AXIS_Z + 0.2 })); // spring clip
   stage.add(mesh(new THREE.BoxGeometry(7.6, 0.12, 2.6), MAT.glass, { x: -0.2, y: STAGE_Y + 0.06, z: AXIS_Z + 0.1 }));  // slide
   stage.add(mesh(new THREE.BoxGeometry(2.2, 0.06, 2.2), MAT.glass, { x: 0, y: STAGE_Y + 0.15, z: AXIS_Z }));          // coverslip
   // vernier scale strip along the right edge
   stage.add(mesh(box(0.2, 0.15, 9, 0.02), MAT.chrome, { x: 8.3, y: STAGE_Y + 0.05, z: stageZ }));
   // coaxial X/Y stage knobs under the right-front corner
-  stage.add(mesh(cyl(0.35, 0.35, 5.5), MAT.chrome, { x: 7.4, y: STAGE_Y - 3.5, z: 7 }));
-  const sk1 = knurl(1.3, 1.1, MAT.black); sk1.position.set(7.4, STAGE_Y - 4.2, 7); stage.add(sk1);
-  const sk2 = knurl(0.9, 1.3, MAT.blackMatte); sk2.position.set(7.4, STAGE_Y - 5.5, 7); stage.add(sk2);
   // stage bracket riding the rack
   stage.add(mesh(box(5.5, 2.6, 7.0, 0.3), MAT.black, { y: STAGE_Y - 1.6, z: PILLAR_FRONT + 4.0 }));
   tagChildren(stage);
   root.add(stage);
   parts.stage = stage;
+
+  // ---------- Slide holder (L-guide and spring clip) ----------
+  const holder = part('slideholder', 'Slide holder');
+  holder.add(mesh(box(8, 0.35, 0.5, 0.05), MAT.black, { x: -1, y: STAGE_Y + 0.15, z: AXIS_Z - 2.6 }));
+  holder.add(mesh(box(0.5, 0.35, 5.6, 0.05), MAT.black, { x: -5, y: STAGE_Y + 0.15, z: AXIS_Z }));
+  holder.add(mesh(box(3.2, 0.3, 1.2, 0.1), MAT.chrome, { x: 3.4, y: STAGE_Y + 0.25, z: AXIS_Z + 0.2 })); // spring clip
+  tagChildren(holder);
+  root.add(holder);
+  parts.slideholder = holder;
+
+  // ---------- Stage travel knobs (coaxial X/Y under the right-front corner) ----------
+  const travel = part('stageknobs', 'Stage knobs');
+  travel.add(mesh(cyl(0.35, 0.35, 5.5), MAT.chrome, { x: 7.4, y: STAGE_Y - 3.5, z: 7 }));
+  const sk1 = knurl(1.3, 1.1, MAT.black); sk1.position.set(7.4, STAGE_Y - 4.2, 7); travel.add(sk1);
+  const sk2 = knurl(0.9, 1.3, MAT.blackMatte); sk2.position.set(7.4, STAGE_Y - 5.5, 7); travel.add(sk2);
+  tagChildren(travel);
+  root.add(travel);
+  parts.stageknobs = travel;
 
   // ---------- Condenser ----------
   const cond = part('condenser', 'Condenser');
@@ -213,16 +251,22 @@ export function buildMicroscope() {
   root.add(cond);
   parts.condenser = cond;
 
-  // ---------- Polarizer (over field lens) and analyzer (above the nosepiece) ----------
+  // ---------- Polarizer (over the field lens) ----------
   const pol = part('polarizer', 'Polarizer');
   pol.add(mesh(cyl(2.4, 2.4, 0.35), MAT.blackMatte, { y: 6.75, z: AXIS_Z }));
   pol.add(mesh(cyl(1.8, 1.8, 0.1), new THREE.MeshStandardMaterial({ color: 0x4d5a6b, roughness: 0.2, metalness: 0.4, transparent: true, opacity: 0.85 }), { y: 6.97, z: AXIS_Z }));
   pol.add(mesh(box(1.6, 0.3, 0.6, 0.1), MAT.black, { x: 2.8, y: 6.75, z: AXIS_Z })); // rotation tab
-  pol.add(mesh(box(5.5, 0.5, 5.5, 0.15), MAT.blackMatte, { y: NOSE_Y + 1.55, z: 1.2 })); // analyzer plate
-  pol.add(mesh(box(2.4, 0.4, 1.4, 0.1), MAT.black, { x: 3.8, y: NOSE_Y + 1.55, z: 1.2 })); // slider tab
   tagChildren(pol);
   root.add(pol);
   parts.polarizer = pol;
+
+  // ---------- Analyzer (slider between the nosepiece and the head) ----------
+  const ana = part('analyzer', 'Analyzer');
+  ana.add(mesh(box(5.5, 0.5, 5.5, 0.15), MAT.blackMatte, { y: NOSE_Y + 1.55, z: 1.2 })); // plate
+  ana.add(mesh(box(2.4, 0.4, 1.4, 0.1), MAT.black, { x: 3.8, y: NOSE_Y + 1.55, z: 1.2 })); // slider tab
+  tagChildren(ana);
+  root.add(ana);
+  parts.analyzer = ana;
 
   // ---------- Nosepiece (rotating) ----------
   const nose = part('nosepiece', 'Nosepiece');

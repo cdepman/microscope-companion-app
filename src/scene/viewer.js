@@ -16,6 +16,13 @@ const VIEW_DIR = {
   arm: new THREE.Vector3(1, 0.4, -0.3),
   head: new THREE.Vector3(0.7, 0.6, 1),
   eyepieces: new THREE.Vector3(0.4, 0.5, 1),
+  dimmer: new THREE.Vector3(-0.6, 0.7, 1),
+  power: new THREE.Vector3(-1, 0.4, 0.2),
+  fielddiaphragm: new THREE.Vector3(0.5, 0.8, 1),
+  lamphouse: new THREE.Vector3(0.6, 0.5, -1),
+  slideholder: new THREE.Vector3(0.3, 0.9, 0.8),
+  stageknobs: new THREE.Vector3(1, 0.1, 0.8),
+  analyzer: new THREE.Vector3(1, 0.2, 0.8),
 };
 
 export class Viewer {

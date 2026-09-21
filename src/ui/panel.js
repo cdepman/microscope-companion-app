@@ -198,7 +198,7 @@ export class Panel {
         </article>`;
     }
     return `
-      <p class="hint">Twelve selectable parts. Click one here or in the 3D view.</p>
+      <p class="hint">Click a part here or in the 3D view.</p>
       <div class="part-grid">
         ${PARTS.map((x) => `
           <button class="part-card" data-part="${x.id}">
