@@ -192,7 +192,7 @@ export function buildMicroscope() {
   // ---------- Focus knobs: large coaxial pair low on the pillar sides ----------
   const focus = part('focus', 'Focus');
   for (const side of [-1, 1]) {
-    const x = side * 5.5, y = 9.0, z = PILLAR_FRONT - 4.5;
+    const x = side * 5.5, y = 11.2, z = PILLAR_FRONT - 4.5; // clears the pillar foot (top at y=7)
     const coarse = knurl(3.3, 1.6, MAT.black); coarse.rotation.z = Math.PI / 2; coarse.position.set(x + side * 0.8, y, z); focus.add(coarse);
     const fine = knurl(2.0, 1.8, MAT.blackMatte); fine.rotation.z = Math.PI / 2; fine.position.set(x + side * 2.5, y, z); focus.add(fine);
     focus.add(mesh(cyl(1.0, 1.0, 1.2), MAT.black, { x: x + side * 3.9, y, z, rz: Math.PI / 2 }));   // fine knob cap
