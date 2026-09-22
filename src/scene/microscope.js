@@ -23,6 +23,8 @@ const MAT = {
   steel: new THREE.MeshStandardMaterial({ color: 0xaeb2b6, roughness: 0.35, metalness: 0.85 }),
   glass: new THREE.MeshPhysicalMaterial({ color: 0xbfd9e8, roughness: 0.05, metalness: 0, transmission: 0.6, thickness: 0.3, transparent: true, opacity: 0.85 }),
   lamp: new THREE.MeshStandardMaterial({ color: 0xfff2c0, emissive: 0xffd66b, emissiveIntensity: 1.6, roughness: 0.3 }),
+  ledWhite: new THREE.MeshStandardMaterial({ color: 0xf4f7ff, emissive: 0xdfe8ff, emissiveIntensity: 1.8, roughness: 0.3 }),
+  uv: new THREE.MeshStandardMaterial({ color: 0x6a3cff, emissive: 0x7a3dff, emissiveIntensity: 2.2, roughness: 0.3 }),
   rubber: new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.95, metalness: 0 }),
   band: {
     red: new THREE.MeshStandardMaterial({ color: 0xc23a2b, roughness: 0.5 }),
@@ -87,22 +89,36 @@ function objective(mag, bandMat, length, radius) {
   return g;
 }
 
-/** Gooseneck lamp arm through the given points; head aims along the final tangent. */
-function gooseneck(...points) {
+/** Gooseneck lamp arm through the given points; head aims along the final tangent.
+ *  style 'led': wide flat puck with a ring of white LED dots. style 'uv': small
+ *  torch-style head with a violet emitter. */
+function gooseneck(style, ...points) {
   const curve = new THREE.CatmullRomCurve3(points);
   const tube = new THREE.TubeGeometry(curve, 48, 0.32, 12, false);
   const g = new THREE.Group();
   g.add(mesh(tube, MAT.rubber));
   const end = curve.getPoint(1);
   const tangent = curve.getTangent(1).normalize();
-  const head = mesh(cyl(1.1, 0.6, 1.6), MAT.black);
+  const head = new THREE.Group();
   head.position.copy(end);
   head.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), tangent);
+  if (style === 'led') {
+    head.add(mesh(cyl(2.0, 1.7, 0.9), MAT.black, { y: 0.45 }));                       // flat wide puck
+    head.add(mesh(cyl(1.85, 1.85, 0.12), MAT.blackMatte, { y: 0.96 }));               // face
+    for (let i = 0; i < 12; i++) {                                                     // ring of LEDs
+      const a = (i / 12) * Math.PI * 2;
+      head.add(mesh(cyl(0.18, 0.18, 0.1), MAT.ledWhite, { x: Math.cos(a) * 1.3, y: 1.06, z: Math.sin(a) * 1.3 }));
+    }
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2 + 0.3;
+      head.add(mesh(cyl(0.18, 0.18, 0.1), MAT.ledWhite, { x: Math.cos(a) * 0.65, y: 1.06, z: Math.sin(a) * 0.65 }));
+    }
+  } else {
+    head.add(mesh(cyl(0.75, 0.55, 1.7), MAT.black, { y: 0.85 }));                     // slim torch head
+    head.add(mesh(cyl(0.8, 0.8, 0.3), MAT.blackMatte, { y: 1.65 }));                  // bezel
+    head.add(mesh(cyl(0.55, 0.55, 0.12), MAT.uv, { y: 1.82 }));                        // violet emitter
+  }
   g.add(head);
-  const led = mesh(new THREE.CircleGeometry(0.85, 24), MAT.lamp);
-  led.position.copy(end.clone().add(tangent.clone().multiplyScalar(0.82)));
-  led.lookAt(end.clone().add(tangent.clone().multiplyScalar(3)));
-  g.add(led);
   return g;
 }
 
@@ -347,22 +363,32 @@ export function buildMicroscope() {
   root.add(eyes);
   parts.eyepieces = eyes;
 
-  // ---------- Gooseneck side lights (add-on, clamped to the left of the stage) ----------
-  const side = part('sidelight', 'Side lights');
+  // ---------- Gooseneck lights (add-on, clamped to the left of the stage) ----------
+  // Shared clamp block lives with the LED light.
+  const side = part('sidelight', 'LED side light');
   side.add(mesh(box(2.2, 2.8, 2.2, 0.3), MAT.black, { x: -9.2, y: STAGE_Y - 0.4, z: 2.5 }));
-  side.add(gooseneck(
+  side.add(gooseneck('led',
     new THREE.Vector3(-9.2, STAGE_Y + 1.0, 2.5), new THREE.Vector3(-11, STAGE_Y + 12, -2),
     new THREE.Vector3(-7, STAGE_Y + 11, 5.5), new THREE.Vector3(-4.6, STAGE_Y + 8.5, 6.4)));
-  side.add(gooseneck(
-    new THREE.Vector3(-9.2, STAGE_Y + 1.0, 2.5), new THREE.Vector3(-14, STAGE_Y + 5, 9),
-    new THREE.Vector3(-8.5, STAGE_Y + 5.5, 10.5), new THREE.Vector3(-5.8, STAGE_Y + 4, 8.8)));
-  const l1 = new THREE.SpotLight(0xfff0c8, 40, 25, 0.5, 0.6, 1.5);
+  const l1 = new THREE.SpotLight(0xf4f7ff, 40, 25, 0.5, 0.6, 1.5);
   l1.position.set(-4.6, STAGE_Y + 8.5, 6.4);
   l1.target.position.set(0, STAGE_Y, AXIS_Z);
   side.add(l1, l1.target);
   tagChildren(side);
   root.add(side);
   parts.sidelight = side;
+
+  const uv = part('uvlight', 'UV light');
+  uv.add(gooseneck('uv',
+    new THREE.Vector3(-9.2, STAGE_Y + 1.0, 2.5), new THREE.Vector3(-14, STAGE_Y + 5, 9),
+    new THREE.Vector3(-8.5, STAGE_Y + 5.5, 10.5), new THREE.Vector3(-5.8, STAGE_Y + 4, 8.8)));
+  const l2 = new THREE.SpotLight(0x8a4dff, 18, 18, 0.45, 0.7, 1.5);
+  l2.position.set(-5.8, STAGE_Y + 4, 8.8);
+  l2.target.position.set(0, STAGE_Y, AXIS_Z);
+  uv.add(l2, l2.target);
+  tagChildren(uv);
+  root.add(uv);
+  parts.uvlight = uv;
 
   root.userData.parts = parts;
   return root;

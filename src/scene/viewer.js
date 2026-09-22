@@ -9,6 +9,7 @@ const VIEW_DIR = {
   default: new THREE.Vector3(0.75, 0.5, 1),
   focus: new THREE.Vector3(1, 0.35, 0.45),
   sidelight: new THREE.Vector3(-0.9, 0.55, 0.9),
+  uvlight: new THREE.Vector3(-0.9, 0.35, 1),
   illuminator: new THREE.Vector3(0.5, 0.75, 1),
   base: new THREE.Vector3(0.6, 0.8, 1),
   condenser: new THREE.Vector3(0.9, 0.25, 1),

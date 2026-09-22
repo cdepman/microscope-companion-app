@@ -186,13 +186,23 @@ export const PARTS = [
   },
   {
     id: 'sidelight',
-    name: 'Gooseneck side lights (add-on)',
-    short: 'Side lights',
+    name: 'LED side light (add-on gooseneck)',
+    short: 'LED light',
     confidence: 'photo',
-    body: 'Two gooseneck LED lamps clamp to the stand and illuminate opaque subjects from above and the side. Most useful with the 4× objective, whose long working distance leaves room to aim the light.',
-    detail: 'This is oblique reflected illumination, not true coaxial epi-illumination. Expect shadows and directional texture, which is often exactly what makes surfaces readable.',
+    body: 'A flat, wide white-LED puck on a gooseneck, clamped to the left of the stage. It lights opaque subjects from above and the side. Most useful with the 4× objective, whose long working distance leaves room to aim it.',
+    detail: 'This is oblique reflected illumination, not true coaxial epi-illumination. Expect shadows and directional texture, which is often exactly what makes surfaces readable. Rake the angle low for topography, raise it for even colour.',
     tips: ['Use for chips, coins, textiles, insects.', 'Transmitted light will not help with opaque silicon; side light will.'],
-    keywords: ['gooseneck', 'side light', 'side lights', 'incident', 'reflected', 'epi', 'opaque', 'led', 'lamps'],
+    keywords: ['gooseneck', 'side light', 'side lights', 'incident', 'reflected', 'epi', 'opaque', 'led', 'lamps', 'white light'],
+  },
+  {
+    id: 'uvlight',
+    name: 'UV light (add-on gooseneck)',
+    short: 'UV light',
+    confidence: 'photo',
+    body: 'A small torch-style UV emitter on the second gooseneck. Aimed at the stage it makes fluorescent materials glow: many minerals, optical brighteners in paper and fabric, chlorophyll, some inks and drugs.',
+    detail: 'Consumer UV torches are usually 365 or 395 nm; 365 nm gives cleaner fluorescence with less visible violet spill. This is not a fluorescence microscope, since there is no excitation filter or dichroic, so expect a violet cast unless you add a yellow barrier filter over the eyepiece or camera.',
+    tips: ['Never look into it, and keep it off skin at close range for long periods.', 'Add a cheap yellow (longpass) filter to kill the violet and see the fluorescence alone.', 'Try Epsom salt, quinine tonic water, a highlighter smear, and a scrap of white paper.'],
+    keywords: ['uv', 'ultraviolet', 'fluorescence', 'fluorescent', 'blacklight', 'black light', 'purple', 'violet', '365', '395', 'glow'],
   },
 ];
 
